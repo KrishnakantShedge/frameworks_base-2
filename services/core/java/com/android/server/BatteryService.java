@@ -178,7 +178,6 @@ public final class BatteryService extends SystemService {
     private boolean mBatteryLevelLow;
 
     private boolean mVoocCharger;
-    private boolean mHasVoocCharger;
     private boolean mLastVoocCharger;
 
     private long mDischargeStartTime;
@@ -211,9 +210,6 @@ public final class BatteryService extends SystemService {
         mLed = new Led(context, getLocalService(LightsManager.class));
         mBatteryStats = BatteryStatsService.getService();
         mActivityManagerInternal = LocalServices.getService(ActivityManagerInternal.class);
-
-        mHasVoocCharger = mContext.getResources().getBoolean(
-                com.android.internal.R.bool.config_hasVoocCharger);
 
         mCriticalBatteryLevel = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_criticalBatteryWarningLevel);
@@ -511,7 +507,7 @@ public final class BatteryService extends SystemService {
         shutdownIfNoPowerLocked();
         shutdownIfOverTempLocked();
 
-        mVoocCharger = mHasVoocCharger && isVoocCharger();
+        mVoocCharger = isVoocCharger();
 
         if (force || (mHealthInfo.batteryStatus != mLastBatteryStatus ||
                 mHealthInfo.batteryHealth != mLastBatteryHealth ||
